@@ -1,6 +1,17 @@
 {
+  "name": "syntecxhub-project-name",
+  "version": "1.0.0",
+  "description": "Syntecxhub Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "bun run --watch src/main.ts"
+  },
   "dependencies": {
     "express": "^5.2.1",
     "mongoose": "^9.3.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6"
   }
 }
