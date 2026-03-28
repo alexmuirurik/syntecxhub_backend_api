@@ -1,18 +1,13 @@
 import express from "express"
-import {
-    createUser,
-    deleteUser,
-    getUser,
-    getUsers,
-    updateUser,
-} from "../controllers/usersController"
+import { UsersController } from "../controllers/usersController"
 
 const userRoutes = express.Router()
-// User Routes
-userRoutes.get("/", getUsers)
-userRoutes.get("/:id", getUser)
-userRoutes.post("/", createUser)
-userRoutes.put(":id", updateUser)
-userRoutes.delete("/:id", deleteUser)
+const userController = new UsersController()
+
+userRoutes.get("/", userController.getUsers)
+userRoutes.get("/:id", userController.getUser)
+userRoutes.post("/", userController.createUser)
+userRoutes.put(":id", userController.updateUser)
+userRoutes.delete("/:id", userController.deleteUser)
 
 export default userRoutes

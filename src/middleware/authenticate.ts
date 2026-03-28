@@ -1,20 +1,42 @@
 import express from "express"
 import jwt from "jsonwebtoken"
+import passport from "passport"
 
-export const authenticate = (
+export const authenticate = passport.authorize("bearer", { session: false })
+
+export const unless = (url: string, middleware: express.RequestHandler) => {
+    return (
+        req: express.Request,
+        res: express.Response,
+        next: express.NextFunction,
+    ) => {
+        if (req.originalUrl.startsWith(url)) {
+            next()
+        } else {
+            middleware(req, res, next)
+        }
+    }
+}
+
+const secretKey = "secret"
+export const authenticateToken = (
     req: express.Request,
     res: express.Response,
     next: express.NextFunction,
 ) => {
-    if (req.headers.authorization) {
-        const token = req.headers.authorization.split(" ")[1]
-        const { user } = jwt.verify(
-            token,
-            process.env.JWT_SECRET as string,
-        ) as { user: string }
-        req.user = user
-        next()
-    } else {
-        res.status(401).send("Unauthorized")
+    const token = req.headers.authorization
+    if (token == null) {
+        return res.status(401).json({ message: "No token provided" })
     }
+    const [, newToken] = token.split(" ")
+    jwt.verify(newToken, secretKey, (err, user) => {
+        if (err) {
+            return res.status(401).json({ message: "Invalid token" })
+        }
+        if (!user) {
+            return res.status(401).json({ message: "Invalid token" })
+        }
+        req.user = user
+        return next()
+    })
 }

@@ -1,18 +1,13 @@
 import express from "express"
-import {
-    createProduct,
-    deleteProduct,
-    getProduct,
-    getProducts,
-    updateProduct,
-} from "../controllers/productController"
+import { ProductController } from "../controllers/productController"
 
 const productRoutes = express.Router()
-// User Routes
-productRoutes.get("/", getProducts)
-productRoutes.get("/:id", getProduct)
-productRoutes.post("/", createProduct)
-productRoutes.put("/:id", updateProduct)
-productRoutes.delete("/:id", deleteProduct)
+const productController = new ProductController()
+
+productRoutes.get("/", productController.getProducts)
+productRoutes.get("/:id", productController.getProduct)
+productRoutes.post("/", productController.createProduct)
+productRoutes.put("/:id", productController.updateProduct)
+productRoutes.delete("/:id", productController.deleteProduct)
 
 export default productRoutes
